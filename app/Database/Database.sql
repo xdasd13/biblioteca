@@ -31,6 +31,7 @@ CREATE TABLE subcategorias(
 	CONSTRAINT fk_idcategoria FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria)
 )ENGINE = INNODB;
 
+
 INSERT INTO subcategorias (subcategoria, idcategoria) VALUES
 ('Razonamiento Lógico Matemático', 1), -- Matemáticas
 ('Álgebra', 1),
