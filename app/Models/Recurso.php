@@ -33,12 +33,12 @@ class Recurso extends Model
 
     // Validation
     protected $validationRules = [
-        'idsubcategoria' => 'required|integer|is_not_unique[subcategorias.idsubcategoria]',
-        'ideditorial'    => 'required|integer|is_not_unique[editoriales.ideditorial]',
+        'idsubcategoria' => 'required|integer',
+        'ideditorial'    => 'required|integer',
         'tipo'           => 'required|in_list[Físico,Digital]',
         'titulo'         => 'required|max_length[200]|min_length[3]',
         'apublicacion'   => 'required|integer|greater_than[1900]',
-        'isbn'           => 'required|max_length[20]|min_length[10]|is_unique[recursos.isbn,idrecurso,{idrecurso}]',
+        'isbn'           => 'required|exact_length[13]|numeric|is_unique[recursos.isbn,idrecurso,{idrecurso}]',
         'numpaginas'     => 'required|integer|greater_than[0]',
         'rutaportada'    => 'permit_empty|max_length[200]',
         'rutarecurso'    => 'permit_empty|max_length[200]',
@@ -48,13 +48,11 @@ class Recurso extends Model
     protected $validationMessages = [
         'idsubcategoria' => [
             'required' => 'La subcategoría es obligatoria',
-            'integer' => 'La subcategoría debe ser un número válido',
-            'is_not_unique' => 'La subcategoría seleccionada no existe'
+            'integer' => 'La subcategoría debe ser un número válido'
         ],
         'ideditorial' => [
             'required' => 'La editorial es obligatoria',
-            'integer' => 'La editorial debe ser un número válido',
-            'is_not_unique' => 'La editorial seleccionada no existe'
+            'integer' => 'La editorial debe ser un número válido'
         ],
         'tipo' => [
             'required' => 'El tipo de recurso es obligatorio',
@@ -68,13 +66,12 @@ class Recurso extends Model
         'apublicacion' => [
             'required' => 'El año de publicación es obligatorio',
             'integer' => 'El año debe ser un número válido',
-            'greater_than' => 'El año debe ser mayor a 1900',
-            'less_than_equal_to' => 'El año no puede ser mayor al año actual'
+            'greater_than' => 'El año debe ser mayor a 1900'
         ],
         'isbn' => [
             'required' => 'El ISBN es obligatorio',
-            'max_length' => 'El ISBN no puede exceder 20 caracteres',
-            'min_length' => 'El ISBN debe tener al menos 10 caracteres',
+            'exact_length' => 'El ISBN debe tener exactamente 13 dígitos',
+            'numeric' => 'El ISBN debe contener solo números',
             'is_unique' => 'Este ISBN ya está registrado'
         ],
         'numpaginas' => [

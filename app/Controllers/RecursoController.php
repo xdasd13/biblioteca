@@ -65,11 +65,11 @@ class RecursoController extends BaseController
      */
     public function guardar()
     {
-        // Verificar que sea una petición AJAX
-        if (!$this->request->isAJAX()) {
+        // Verificar que sea una petición POST
+        if (!$this->request->isPost()) {
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Acceso no autorizado'
+                'message' => 'Método no permitido'
             ]);
         }
 
