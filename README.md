@@ -1,68 +1,184 @@
-# CodeIgniter 4 Application Starter
+# 📚 Sistema de Gestión de Biblioteca - Recursos Educativos
 
-## What is CodeIgniter?
+## Descripción del Proyecto
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Sistema web desarrollado en **CodeIgniter 4** para la gestión integral de recursos educativos en bibliotecas. Permite administrar tanto recursos físicos como digitales con funcionalidades completas de registro, visualización y descarga de contenido.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🎯 Características Principales
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+### Gestión de Recursos Educativos
+- **Registro completo** de recursos físicos y digitales
+- **Categorización** por áreas académicas (Matemáticas, Comunicación, Computación)
+- **Subcategorías** específicas para cada área de conocimiento
+- **Información detallada**: título, año de publicación, ISBN, número de páginas, estado
+- **Gestión de editoriales** con información de nacionalidad
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+### Funcionalidades de Archivos
+- **Subida de imágenes de portada** para identificación visual
+- **Carga de archivos PDF** para recursos digitales
+- **Previsualización y descarga** de documentos PDF
+- **Almacenamiento seguro** en directorio `public/uploads/`
 
-## Installation & updates
+### Interfaz de Usuario
+- **Diseño limpio y moderno** siguiendo principios UX/UI
+- **Lista organizada** con información esencial
+- **Formato profesional** del ISBN (978-612-00-1234-5)
+- **Indicadores visuales** de estado y tipo de recurso
+- **Responsive design** para diferentes dispositivos
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## 🛠️ Tecnologías Utilizadas
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+- **Framework**: CodeIgniter 4
+- **Lenguaje**: PHP 8.1+
+- **Base de Datos**: MySQL
+- **Frontend**: Bootstrap 5, FontAwesome, SweetAlert2
+- **Servidor**: Laragon (Windows)
 
-## Setup
+## 📋 Estructura de Datos
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+### Tabla: recursos
+- `idrecurso` - ID único del recurso
+- `idsubcategoria` - Relación con subcategoría
+- `ideditorial` - Relación con editorial
+- `tipo` - Físico o Digital
+- `titulo` - Título del recurso
+- `apublicacion` - Año de publicación
+- `isbn` - Código ISBN (13 dígitos)
+- `numpaginas` - Número de páginas
+- `rutaportada` - Ruta de imagen de portada
+- `rutarecurso` - Ruta de archivo PDF
+- `estado` - Bueno, Regular, Malo
+- `creado` - Fecha de creación
+- `modificado` - Fecha de modificación
 
-## Important Change with index.php
+### Relaciones
+- **Categorías → Subcategorías → Recursos**
+- **Editoriales → Recursos**
+- **Ubicación geográfica** (Departamentos → Provincias → Distritos)
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+## 🚀 Instalación y Configuración
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+### Requisitos Previos
+- PHP 8.1 o superior
+- MySQL 5.7 o superior
+- Composer
+- Laragon (o cualquier otro servidor web)
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### Pasos de Instalación
 
-## Repository Management
+1. **Clonar el repositorio**
+   ```bash
+   git clone https://github.com/xdasd13/biblioteca.git
+   cd biblioteca
+   ```
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+2. **Instalar dependencias**
+   ```bash
+   composer install
+   ```
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+3. **Configurar base de datos**
+   - Copiar `.env.example` a `.env`
+   - Configurar credenciales de base de datos
+   - Importar `app/Database/Database.sql`
 
-## Server Requirements
 
-PHP version 8.1 or higher is required, with the following extensions installed:
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## 📁 Estructura del Proyecto
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+```
+biblioteca/
+├── app/
+│   ├── Controllers/
+│   │   ├── RecursoController.php    # Gestión de recursos
+│   │   ├── EditorialController.php  # Gestión de editoriales
+│   │   └── PersonaController.php    # Gestión de personas
+│   ├── Models/
+│   │   ├── Recurso.php             # Modelo de recursos
+│   │   ├── Editorial.php           # Modelo de editoriales
+│   │   └── Categoria.php           # Modelo de categorías
+│   ├── Views/
+│   │   └── recursos/
+│   │       ├── index.php           # Lista de recursos
+│   │       └── crear.php           # Formulario de registro
+│   └── Database/
+│       └── Database.sql            # Estructura de BD
+├── public/
+│   └── uploads/                    # Archivos subidos
+└── README.md
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+## 🎨 Funcionalidades por Módulo
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+### Módulo de Recursos
+- ✅ **Crear** nuevos recursos con validaciones
+- ✅ **Listar** recursos con información completa
+- ✅ **Eliminar** recursos con confirmación
+- ✅ **Subir archivos** (imágenes y PDFs)
+- ✅ **Descargar/Previsualizar** documentos PDF
+
+### Validaciones Implementadas
+- ISBN único de 13 dígitos
+- Año de publicación válido (1900 - actual)
+- Campos obligatorios con mensajes personalizados
+- Validación de tipos de archivo (imágenes/PDF)
+
+### Características UX/UI
+- Interfaz limpia y profesional
+- Feedback visual inmediato
+- Carga de archivos drag & drop
+- Confirmaciones de acciones críticas
+- Mensajes de estado claros
+
+## 🔧 Uso del Sistema
+
+### Registrar un Nuevo Recurso
+1. Acceder a "Nuevo Recurso"
+2. Completar información básica
+3. Seleccionar categoría y subcategoría
+4. Subir imagen de portada (opcional)
+5. Para recursos digitales: subir archivo PDF
+6. Guardar el recurso
+
+### Gestionar Recursos Existentes
+- **Ver lista**: Acceso directo desde página principal
+- **Descargar PDF**: Click en enlace "PDF" en la columna Archivo
+- **Eliminar**: Botón de eliminar con confirmación
+
+## 🌟 Características Destacadas
+
+- **Sistema de archivos robusto** con nombres únicos
+- **Validación integral** de datos de entrada
+- **Interfaz responsive** para móviles y escritorio
+- **Gestión de errores** con mensajes informativos
+- **Código limpio** siguiendo estándares PSR
+- **Base de datos normalizada** con relaciones bien definidas
+
+
+---
+
+**Desarrollado con ❤️ usando CodeIgniter 4**
+
+## 🔒 Configuración de Seguridad
+
+### Configuración del Servidor Web
+- Configurar el servidor web para apuntar a la carpeta `public/`
+- **NO** apuntar al directorio raíz del proyecto
+- Configurar un virtual host para mayor seguridad
+
+### Variables de Entorno
+```bash
+# Ejemplo de configuración .env
+CI_ENVIRONMENT = development
+app.baseURL = 'http://localhost/biblioteca/public/'
+
+database.default.hostname = localhost
+database.default.database = biblioteca
+database.default.username = tu_usuario
+database.default.password = tu_password
+database.default.DBDriver = MySQLi
+```
+
+## 📝 Licencia
+
+Este proyecto está desarrollado para fines educativos y de gestión bibliotecaria.
