@@ -65,12 +65,43 @@ class RecursoController extends BaseController
      */
     public function guardar()
     {
-        // Verificar que sea una petición POST
-        if ($this->request->getMethod() !== 'post') {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
+        $rutaPortada = '';
+        $rutaRecurso = '';
+        
+        // Manejar subida de imagen de portada
+        $archivoPortada = $this->request->getFile('portada');
+        if ($archivoPortada && $archivoPortada->isValid() && !$archivoPortada->hasMoved()) {
+            // Crear directorio si no existe
+            $directorioUploads = FCPATH . 'uploads';
+            if (!is_dir($directorioUploads)) {
+                mkdir($directorioUploads, 0755, true);
+            }
+            
+            // Generar nombre único para el archivo
+            $nombreArchivo = time() . '_' . $archivoPortada->getRandomName();
+            
+            // Mover archivo
+            if ($archivoPortada->move($directorioUploads, $nombreArchivo)) {
+                $rutaPortada = 'uploads/' . $nombreArchivo;
+            }
+        }
+
+        // Manejar subida de archivo PDF del recurso digital
+        $archivoRecurso = $this->request->getFile('recurso_digital');
+        if ($archivoRecurso && $archivoRecurso->isValid() && !$archivoRecurso->hasMoved()) {
+            // Crear directorio si no existe
+            $directorioUploads = FCPATH . 'uploads';
+            if (!is_dir($directorioUploads)) {
+                mkdir($directorioUploads, 0755, true);
+            }
+            
+            // Generar nombre único para el archivo
+            $nombreArchivo = time() . '_' . $archivoRecurso->getRandomName();
+            
+            // Mover archivo
+            if ($archivoRecurso->move($directorioUploads, $nombreArchivo)) {
+                $rutaRecurso = 'uploads/' . $nombreArchivo;
+            }
         }
 
         $datos = [
@@ -81,21 +112,31 @@ class RecursoController extends BaseController
             'apublicacion' => $this->request->getPost('apublicacion'),
             'isbn' => preg_replace('/[^0-9]/', '', $this->request->getPost('isbn')), // Remover guiones
             'numpaginas' => $this->request->getPost('numpaginas'),
-            'rutaportada' => $this->request->getPost('rutaportada'),
-            'rutarecurso' => $this->request->getPost('rutarecurso'),
+            'rutaportada' => $rutaPortada,
+            'rutarecurso' => $rutaRecurso,
             'estado' => $this->request->getPost('estado')
         ];
 
-        // Validar datos
-        if (!$this->recursoModel->validate($datos)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Error de validación',
-                'errors' => $this->recursoModel->errors()
-            ]);
-        }
-
         try {
+            // Validar ISBN único manualmente
+            $isbnExistente = $this->recursoModel->where('isbn', $datos['isbn'])->first();
+            if ($isbnExistente) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Error de validación',
+                    'errors' => ['isbn' => 'Este ISBN ya está registrado']
+                ]);
+            }
+
+            // Validar datos básicos
+            if (!$this->recursoModel->validate($datos)) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Error de validación',
+                    'errors' => $this->recursoModel->errors()
+                ]);
+            }
+            
             $idRecurso = $this->recursoModel->insert($datos);
             
             if ($idRecurso) {
@@ -105,7 +146,8 @@ class RecursoController extends BaseController
                 return $this->response->setJSON([
                     'success' => true,
                     'message' => 'Recurso registrado exitosamente',
-                    'data' => $recursoCompleto
+                    'data' => $recursoCompleto,
+                    'redirect' => base_url('recursos')
                 ]);
             } else {
                 return $this->response->setJSON([

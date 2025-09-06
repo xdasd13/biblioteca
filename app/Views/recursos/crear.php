@@ -63,7 +63,7 @@
                                 <select class="form-select" id="tipo" name="tipo" required>
                                     <option value="">Seleccione el tipo</option>
                                     <option value="Digital">Digital</option>
-                                    <option value="Físico">Físico</option>
+                                    <option value="Fisico">Físico</option>
                                 </select>
                                 <div class="invalid-feedback"></div>
                             </div>
@@ -116,19 +116,21 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="rutaportada" class="form-label">Ruta de la Portada</label>
-                                <input type="text" class="form-control" id="rutaportada" name="rutaportada" 
-                                       placeholder="portadas/libro.jpg">
-                                <div class="form-text">Ruta relativa del archivo de portada</div>
+                                <label for="portada" class="form-label">Imagen de la Portada</label>
+                                <input type="file" class="form-control" id="portada" name="portada" 
+                                       accept="image/*">
+                                <div class="form-text">Seleccione una imagen para la portada (JPG, PNG, etc.)</div>
                                 <div class="invalid-feedback"></div>
+                                <input type="hidden" id="rutaportada" name="rutaportada">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="rutarecurso" class="form-label">Ruta del Recurso Digital</label>
-                                <input type="text" class="form-control" id="rutarecurso" name="rutarecurso" 
-                                       placeholder="recursos/libro.pdf">
-                                <div class="form-text">Ruta relativa del archivo digital (solo para recursos digitales)</div>
+                                <label for="recurso_digital" class="form-label">Archivo del Recurso Digital</label>
+                                <input type="file" class="form-control" id="recurso_digital" name="recurso_digital" 
+                                       accept=".pdf">
+                                <div class="form-text">Seleccione un archivo PDF (solo para recursos digitales)</div>
                                 <div class="invalid-feedback"></div>
+                                <input type="hidden" id="rutarecurso" name="rutarecurso">
                             </div>
                         </div>
 
@@ -350,14 +352,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Event listener para tipo de recurso
+    const recursoDigitalInput = document.getElementById('recurso_digital');
     tipoSelect.addEventListener('change', function() {
-        if (this.value === 'Físico') {
-            rutaRecursoInput.value = '';
-            rutaRecursoInput.disabled = true;
-            rutaRecursoInput.placeholder = 'No aplica para recursos físicos';
+        if (this.value === 'Fisico') {
+            recursoDigitalInput.value = '';
+            recursoDigitalInput.disabled = true;
+            recursoDigitalInput.parentNode.querySelector('.form-text').textContent = 'No aplica para recursos físicos';
         } else {
-            rutaRecursoInput.disabled = false;
-            rutaRecursoInput.placeholder = 'recursos/archivo.pdf';
+            recursoDigitalInput.disabled = false;
+            recursoDigitalInput.parentNode.querySelector('.form-text').textContent = 'Seleccione un archivo PDF (solo para recursos digitales)';
         }
     });
 
@@ -446,6 +449,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (result.success) {
+                // Ocultar loading inmediatamente
+                toggleLoading(false);
+                
                 // Mostrar éxito
                 await Swal.fire({
                     title: '¡Éxito!',
@@ -454,13 +460,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     confirmButtonText: 'Continuar'
                 });
 
-                // Mostrar toast
-                mostrarToast('Registro exitoso', 'success');
-
-                // Redirigir después de un breve delay
-                setTimeout(() => {
+                // Redirigir inmediatamente
+                if (result.redirect) {
+                    window.location.href = result.redirect;
+                } else {
                     window.location.href = '<?= base_url('recursos') ?>';
-                }, 1500);
+                }
+                return; // Salir de la función para evitar ejecutar el finally
 
             } else {
                 if (result.errors) {

@@ -1,137 +1,239 @@
 <?= $header ?>
 
-<div class="container-fluid mt-4">
+<style>
+.recursos-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.5rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.recursos-title {
+    color: #495057;
+    font-weight: 600;
+}
+
+.recursos-subtitle {
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.card-recursos {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.table-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #fafbfc;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f3f4;
+    transition: background-color 0.15s ease;
+}
+
+.portada-img {
+    width: 45px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.isbn-formatted {
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+.badge-custom {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+}
+
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.pdf-preview {
+    color: #dc3545;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.pdf-preview:hover {
+    color: #c82333;
+    text-decoration: underline;
+}
+
+.no-pdf {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 0.85rem;
+}
+</style>
+
+<div class="recursos-header">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="mb-1 recursos-title">
+                    <i class="fas fa-book-open me-2"></i>Lista de Recursos Educativos
+                </h2>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="<?= base_url('recursos/crear') ?>" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Nuevo Recurso
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">
-                        <i class="fas fa-book"></i> Gestión de Recursos Educativos
-                    </h4>
-                    <a href="<?= base_url('recursos/crear') ?>" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nuevo Recurso
-                    </a>
-                </div>
-                <div class="card-body">
-                    <!-- Buscador -->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="buscarTitulo" placeholder="Buscar por título...">
-                                <button class="btn btn-outline-secondary" type="button" id="btnBuscar">
-                                    <i class="fas fa-search"></i> Buscar
-                                </button>
-                                <button class="btn btn-outline-secondary" type="button" id="btnLimpiar">
-                                    <i class="fas fa-times"></i> Limpiar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <span class="badge bg-info fs-6" id="totalRecursos">
-                                Total: <?= count($recursos) ?> recursos
-                            </span>
-                        </div>
-                    </div>
+            <div class="card card-recursos">
+                <div class="card-body p-0">
 
                     <!-- Tabla de recursos -->
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="table-dark">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-header">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Título</th>
-                                    <th>Categoría</th>
-                                    <th>Subcategoría</th>
-                                    <th>Editorial</th>
-                                    <th>Tipo</th>
-                                    <th>Año</th>
-                                    <th>ISBN</th>
-                                    <th>Páginas</th>
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
+                                    <th class="text-center" style="width: 80px;">Portada</th>
+                                    <th style="width: 25%;">Título</th>
+                                    <th style="width: 12%;">Categoría</th>
+                                    <th style="width: 15%;">Editorial</th>
+                                    <th style="width: 8%;">Tipo</th>
+                                    <th style="width: 8%;">Año</th>
+                                    <th style="width: 12%;">ISBN</th>
+                                    <th style="width: 8%;">Páginas</th>
+                                    <th style="width: 8%;">Estado</th>
+                                    <th class="text-center" style="width: 10%;">Archivo</th>
+                                    <th class="text-center" style="width: 8%;">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaRecursos">
+                            <tbody>
                                 <?php if (empty($recursos)): ?>
                                     <tr>
-                                        <td colspan="11" class="text-center text-muted">
-                                            <i class="fas fa-inbox fa-3x mb-3"></i>
-                                            <br>No hay recursos registrados
+                                        <td colspan="11" class="text-center text-muted py-5">
+                                            <i class="fas fa-book-open fa-4x mb-3 opacity-50"></i>
+                                            <br><h5>No hay recursos registrados</h5>
+                                            <p>Comience agregando su primer recurso educativo</p>
                                         </td>
                                     </tr>
                                 <?php else: ?>
+                                    <?php 
+                                    function formatIsbn($isbn) {
+                                        if (strlen($isbn) === 13) {
+                                            return substr($isbn, 0, 3) . '-' . substr($isbn, 3, 3) . '-' . substr($isbn, 6, 2) . '-' . substr($isbn, 8, 4) . '-' . substr($isbn, 12, 1);
+                                        }
+                                        return $isbn;
+                                    }
+                                    ?>
                                     <?php foreach ($recursos as $recurso): ?>
                                         <tr data-id="<?= $recurso['idrecurso'] ?>">
-                                            <td><?= $recurso['idrecurso'] ?></td>
-                                            <td>
-                                                <strong><?= esc($recurso['titulo']) ?></strong>
-                                                <?php if (!empty($recurso['rutaportada'])): ?>
-                                                    <br><small class="text-muted">
-                                                        <i class="fas fa-image"></i> Con portada
-                                                    </small>
+                                            <td class="text-center">
+                                                <?php if (!empty($recurso['rutaportada']) && file_exists(FCPATH . $recurso['rutaportada'])): ?>
+                                                    <img src="<?= base_url($recurso['rutaportada']) ?>" 
+                                                         alt="Portada" class="portada-img" 
+                                                         title="<?= esc($recurso['titulo']) ?>">
+                                                <?php else: ?>
+                                                    <div class="portada-img d-flex align-items-center justify-content-center bg-light border">
+                                                        <i class="fas fa-book text-muted"></i>
+                                                    </div>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <span class="badge bg-secondary">
+                                                <strong class="text-primary"><?= esc($recurso['titulo']) ?></strong>
+                                                <br><small class="text-muted">
+                                                    <?= esc($recurso['subcategoria']) ?>
+                                                </small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary badge-custom">
                                                     <?= esc($recurso['categoria']) ?>
                                                 </span>
                                             </td>
-                                            <td><?= esc($recurso['subcategoria']) ?></td>
                                             <td>
-                                                <?= esc($recurso['editorial']) ?>
+                                                <strong><?= esc($recurso['editorial']) ?></strong>
                                                 <br><small class="text-muted">
                                                     <i class="fas fa-flag"></i> <?= esc($recurso['nacionalidad']) ?>
                                                 </small>
                                             </td>
                                             <td>
                                                 <?php if ($recurso['tipo'] == 'Digital'): ?>
-                                                    <span class="badge bg-success">
-                                                        <i class="fas fa-laptop"></i> Digital
+                                                    <span class="badge bg-info badge-custom">
+                                                        <i class="fas fa-laptop me-1"></i>Digital
                                                     </span>
                                                 <?php else: ?>
-                                                    <span class="badge bg-info">
-                                                        <i class="fas fa-book"></i> Físico
+                                                    <span class="badge bg-primary badge-custom">
+                                                        <i class="fas fa-book me-1"></i>Físico
                                                     </span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td><?= $recurso['apublicacion'] ?></td>
-                                            <td>
-                                                <small class="font-monospace">
-                                                    <?= esc($recurso['isbn']) ?>
-                                                </small>
+                                            <td class="text-center">
+                                                <strong><?= $recurso['apublicacion'] ?></strong>
                                             </td>
-                                            <td><?= number_format($recurso['numpaginas']) ?></td>
                                             <td>
+                                                <span class="isbn-formatted">
+                                                    <?= formatIsbn($recurso['isbn']) ?>
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <strong><?= number_format($recurso['numpaginas']) ?></strong>
+                                            </td>
+                                            <td class="text-center">
                                                 <?php
                                                 $estadoClass = match($recurso['estado']) {
                                                     'Bueno' => 'bg-success',
-                                                    'Regular' => 'bg-warning',
+                                                    'Regular' => 'bg-warning text-dark',
                                                     'Malo' => 'bg-danger',
                                                     default => 'bg-secondary'
                                                 };
                                                 ?>
-                                                <span class="badge <?= $estadoClass ?>">
+                                                <span class="badge <?= $estadoClass ?> badge-custom">
                                                     <?= $recurso['estado'] ?>
                                                 </span>
                                             </td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm" role="group">
-                                                    <button type="button" class="btn btn-outline-info btn-ver" 
-                                                            data-id="<?= $recurso['idrecurso'] ?>"
-                                                            title="Ver detalles">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-warning btn-editar" 
-                                                            data-id="<?= $recurso['idrecurso'] ?>"
-                                                            title="Editar">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-danger btn-eliminar" 
-                                                            data-id="<?= $recurso['idrecurso'] ?>"
-                                                            title="Eliminar">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
+                                            <td class="text-center">
+                                                <?php if (!empty($recurso['rutarecurso']) && file_exists(FCPATH . $recurso['rutarecurso'])): ?>
+                                                    <a href="<?= base_url($recurso['rutarecurso']) ?>" 
+                                                       target="_blank" 
+                                                       class="pdf-preview"
+                                                       title="Ver/Descargar PDF">
+                                                        <i class="fas fa-file-pdf me-1"></i>PDF
+                                                    </a>
+                                                <?php else: ?>
+                                                    <span class="no-pdf">Sin archivo</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-outline-danger btn-sm btn-action btn-eliminar" 
+                                                        data-id="<?= $recurso['idrecurso'] ?>"
+                                                        title="Eliminar recurso">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -140,26 +242,6 @@
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal para ver detalles -->
-<div class="modal fade" id="modalDetalles" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-info-circle"></i> Detalles del Recurso
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="detallesRecurso">
-                <!-- Contenido dinámico -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -181,13 +263,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Referencias a elementos
-    const buscarInput = document.getElementById('buscarTitulo');
-    const btnBuscar = document.getElementById('btnBuscar');
-    const btnLimpiar = document.getElementById('btnLimpiar');
-    const tablaRecursos = document.getElementById('tablaRecursos');
-    const totalRecursos = document.getElementById('totalRecursos');
-    const modalDetalles = new bootstrap.Modal(document.getElementById('modalDetalles'));
     const toastNotificacion = new bootstrap.Toast(document.getElementById('toastNotificacion'));
 
     // Función para mostrar toast
@@ -205,117 +280,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toastNotificacion.show();
     }
 
-    // Buscar recursos
-    async function buscarRecursos(titulo = '') {
-        try {
-            const formData = new FormData();
-            formData.append('titulo', titulo);
-
-            const response = await fetch('<?= base_url('recursos/buscar') ?>', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                actualizarTabla(result.data);
-                totalRecursos.textContent = `Total: ${result.data.length} recursos`;
-            } else {
-                mostrarToast('Error al buscar recursos', 'error');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            mostrarToast('Error de conexión', 'error');
-        }
-    }
-
-    // Actualizar tabla
-    function actualizarTabla(recursos) {
-        if (recursos.length === 0) {
-            tablaRecursos.innerHTML = `
-                <tr>
-                    <td colspan="11" class="text-center text-muted">
-                        <i class="fas fa-search fa-3x mb-3"></i>
-                        <br>No se encontraron recursos
-                    </td>
-                </tr>
-            `;
-            return;
-        }
-
-        let html = '';
-        recursos.forEach(recurso => {
-            const estadoClass = recurso.estado === 'Bueno' ? 'bg-success' : 
-                               recurso.estado === 'Regular' ? 'bg-warning' : 'bg-danger';
-            
-            const tipoClass = recurso.tipo === 'Digital' ? 'bg-success' : 'bg-info';
-            const tipoIcon = recurso.tipo === 'Digital' ? 'fas fa-laptop' : 'fas fa-book';
-
-            html += `
-                <tr data-id="${recurso.idrecurso}">
-                    <td>${recurso.idrecurso}</td>
-                    <td>
-                        <strong>${recurso.titulo}</strong>
-                        ${recurso.rutaportada ? '<br><small class="text-muted"><i class="fas fa-image"></i> Con portada</small>' : ''}
-                    </td>
-                    <td><span class="badge bg-secondary">${recurso.categoria}</span></td>
-                    <td>${recurso.subcategoria}</td>
-                    <td>
-                        ${recurso.editorial}
-                        <br><small class="text-muted"><i class="fas fa-flag"></i> ${recurso.nacionalidad}</small>
-                    </td>
-                    <td><span class="badge ${tipoClass}"><i class="${tipoIcon}"></i> ${recurso.tipo}</span></td>
-                    <td>${recurso.apublicacion}</td>
-                    <td><small class="font-monospace">${recurso.isbn}</small></td>
-                    <td>${new Intl.NumberFormat().format(recurso.numpaginas)}</td>
-                    <td><span class="badge ${estadoClass}">${recurso.estado}</span></td>
-                    <td>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-outline-info btn-ver" data-id="${recurso.idrecurso}" title="Ver detalles">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-warning btn-editar" data-id="${recurso.idrecurso}" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-eliminar" data-id="${recurso.idrecurso}" title="Eliminar">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        });
-        
-        tablaRecursos.innerHTML = html;
-        agregarEventListeners();
-    }
-
-    // Agregar event listeners a botones dinámicos
-    function agregarEventListeners() {
-        // Botones eliminar
-        document.querySelectorAll('.btn-eliminar').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const id = this.dataset.id;
-                
-                const result = await Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: 'Esta acción no se puede deshacer',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Sí, eliminar',
-                    cancelButtonText: 'Cancelar'
-                });
-
-                if (result.isConfirmed) {
-                    await eliminarRecurso(id);
-                }
-            });
-        });
-    }
-
     // Eliminar recurso
     async function eliminarRecurso(id) {
         try {
@@ -327,8 +291,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (result.success) {
                 mostrarToast('Recurso eliminado exitosamente', 'success');
-                // Recargar tabla
-                buscarRecursos(buscarInput.value);
+                // Recargar página para actualizar la lista
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             } else {
                 mostrarToast(result.message || 'Error al eliminar recurso', 'error');
             }
@@ -338,24 +304,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event listeners
-    btnBuscar.addEventListener('click', () => {
-        buscarRecursos(buscarInput.value.trim());
+    // Event listeners para botones eliminar
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const id = this.dataset.id;
+            
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: 'Esta acción no se puede deshacer',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#007bff',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
+                await eliminarRecurso(id);
+            }
+        });
     });
 
-    btnLimpiar.addEventListener('click', () => {
-        buscarInput.value = '';
-        buscarRecursos();
+    // Efecto hover mejorado para las filas
+    document.querySelectorAll('tbody tr').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 4px 8px rgba(0, 123, 255, 0.2)';
+        });
+        
+        row.addEventListener('mouseleave', function() {
+            this.style.boxShadow = 'none';
+        });
     });
-
-    buscarInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            buscarRecursos(buscarInput.value.trim());
-        }
-    });
-
-    // Inicializar event listeners
-    agregarEventListeners();
 });
 </script>
 

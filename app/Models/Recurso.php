@@ -35,10 +35,10 @@ class Recurso extends Model
     protected $validationRules = [
         'idsubcategoria' => 'required|integer',
         'ideditorial'    => 'required|integer',
-        'tipo'           => 'required|in_list[Físico,Digital]',
+        'tipo'           => 'required|in_list[Fisico,Digital]',
         'titulo'         => 'required|max_length[200]|min_length[3]',
         'apublicacion'   => 'required|integer|greater_than[1900]',
-        'isbn'           => 'required|exact_length[13]|numeric|is_unique[recursos.isbn,idrecurso,{idrecurso}]',
+        'isbn'           => 'required|exact_length[13]|numeric',
         'numpaginas'     => 'required|integer|greater_than[0]',
         'rutaportada'    => 'permit_empty|max_length[200]',
         'rutarecurso'    => 'permit_empty|max_length[200]',
@@ -56,7 +56,7 @@ class Recurso extends Model
         ],
         'tipo' => [
             'required' => 'El tipo de recurso es obligatorio',
-            'in_list' => 'El tipo debe ser Físico o Digital'
+            'in_list' => 'El tipo debe ser Fisico o Digital'
         ],
         'titulo' => [
             'required' => 'El título es obligatorio',
@@ -71,8 +71,7 @@ class Recurso extends Model
         'isbn' => [
             'required' => 'El ISBN es obligatorio',
             'exact_length' => 'El ISBN debe tener exactamente 13 dígitos',
-            'numeric' => 'El ISBN debe contener solo números',
-            'is_unique' => 'Este ISBN ya está registrado'
+            'numeric' => 'El ISBN debe contener solo números'
         ],
         'numpaginas' => [
             'required' => 'El número de páginas es obligatorio',
