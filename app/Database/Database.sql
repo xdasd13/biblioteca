@@ -32,18 +32,13 @@ CREATE TABLE subcategorias(
 )ENGINE = INNODB;
 
 INSERT INTO subcategorias (subcategoria, idcategoria) VALUES
--- Matemáticas
-('Razonamiento Lógico Matemático', 1),
+('Razonamiento Lógico Matemático', 1), -- Matemáticas
 ('Álgebra', 1),
 ('Trigonometría', 1),
-
--- Comunicación
-('Razonamiento verbal', 2),
+('Razonamiento verbal', 2), -- Comunicación
 ('Composición', 2),
 ('Redacción', 2),
-
--- Computación
-('Base de datos', 3),
+('Base de datos', 3), -- Computación
 ('Sistemas operativos', 3),
 ('Lenguajes de programación', 3);
 
@@ -101,4 +96,4 @@ INSERT INTO personas (dni,apellidos,nombres, telefono,iddistrito) VALUES
 	('60752963', 'Yataco Tasayco', 'Fabian','939863658','1026'),
 	('41414141', 'Tasayco Gonzales', 'Rojas Julio','123456789','1006');
 	
-	SELECT * FROM personas; -- Ctrl + F9
+SELECT * FROM personas;
