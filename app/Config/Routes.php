@@ -36,6 +36,14 @@ $routes->post('/personas/actualizar/(:num)', 'PersonaController::actualizar/$1')
 $routes->get('/personas/eliminar/(:num)', 'PersonaController::eliminar/$1');
 $routes->get('/personas/buscar', 'PersonaController::buscar');
 
+//Rutas: RECURSOS
+$routes->get('/recursos', 'RecursoController::index');
+$routes->get('/recursos/crear', 'RecursoController::crear');
+$routes->post('/recursos/guardar', 'RecursoController::guardar');
+$routes->post('/recursos/buscar', 'RecursoController::buscar');
+$routes->post('/recursos/eliminar/(:num)', 'RecursoController::eliminar/$1');
+$routes->get('/recursos/subcategorias/(:num)', 'RecursoController::getSubcategorias/$1');
+
 //API
 $routes->get('api/personas/buscardni/(:num)', 'PersonaController::searchByDNI/$1');
 $routes->get('api/ubigeo/provincias/(:num)', 'ProvinciaController::getProvinciasByDepartamento/$1');

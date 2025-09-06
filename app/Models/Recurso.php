@@ -37,7 +37,7 @@ class Recurso extends Model
         'ideditorial'    => 'required|integer|is_not_unique[editoriales.ideditorial]',
         'tipo'           => 'required|in_list[Físico,Digital]',
         'titulo'         => 'required|max_length[200]|min_length[3]',
-        'apublicacion'   => 'required|integer|greater_than[1900]|less_than_equal_to[' . date('Y') . ']',
+        'apublicacion'   => 'required|integer|greater_than[1900]',
         'isbn'           => 'required|max_length[20]|min_length[10]|is_unique[recursos.isbn,idrecurso,{idrecurso}]',
         'numpaginas'     => 'required|integer|greater_than[0]',
         'rutaportada'    => 'permit_empty|max_length[200]',
