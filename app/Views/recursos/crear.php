@@ -103,8 +103,8 @@
                             <div class="col-md-12 mb-3">
                                 <label for="isbn" class="form-label">ISBN *</label>
                                 <input type="text" class="form-control" id="isbn" name="isbn" 
-                                       placeholder="9786120012345" maxlength="13" required>
-                                <div class="form-text">Exactamente 13 dígitos numéricos (sin guiones ni espacios)</div>
+                                       placeholder="978-612-00-1234-5" maxlength="17" required>
+                                <div class="form-text">13 dígitos (puede incluir guiones): 978-612-00-1234-5</div>
                                 <div class="invalid-feedback"></div>
                             </div>
 
@@ -299,12 +299,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!valor) {
                     esValido = false;
                     mensaje = 'El ISBN es obligatorio';
-                } else if (valor.length !== 13) {
-                    esValido = false;
-                    mensaje = 'El ISBN debe tener exactamente 13 dígitos';
-                } else if (!/^\d{13}$/.test(valor)) {
-                    esValido = false;
-                    mensaje = 'El ISBN debe contener solo números';
+                } else {
+                    // Remover guiones y espacios para validar
+                    const isbnLimpio = valor.replace(/[-\s]/g, '');
+                    if (isbnLimpio.length !== 13) {
+                        esValido = false;
+                        mensaje = 'El ISBN debe tener exactamente 13 dígitos';
+                    } else if (!/^\d{13}$/.test(isbnLimpio)) {
+                        esValido = false;
+                        mensaje = 'El ISBN debe contener solo números';
+                    }
                 }
                 break;
         }

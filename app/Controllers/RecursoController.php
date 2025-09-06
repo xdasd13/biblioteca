@@ -66,7 +66,7 @@ class RecursoController extends BaseController
     public function guardar()
     {
         // Verificar que sea una petición POST
-        if (!$this->request->isPost()) {
+        if ($this->request->getMethod() !== 'post') {
             return $this->response->setJSON([
                 'success' => false,
                 'message' => 'Método no permitido'
@@ -79,7 +79,7 @@ class RecursoController extends BaseController
             'tipo' => $this->request->getPost('tipo'),
             'titulo' => $this->request->getPost('titulo'),
             'apublicacion' => $this->request->getPost('apublicacion'),
-            'isbn' => $this->request->getPost('isbn'),
+            'isbn' => preg_replace('/[^0-9]/', '', $this->request->getPost('isbn')), // Remover guiones
             'numpaginas' => $this->request->getPost('numpaginas'),
             'rutaportada' => $this->request->getPost('rutaportada'),
             'rutarecurso' => $this->request->getPost('rutarecurso'),
